@@ -15,6 +15,9 @@ struct __attribute__((packed)) health_t {
   uint8_t ignition_line_pkt;
   uint8_t ignition_can_pkt;
   uint8_t controls_allowed_pkt;
+  // mads - PFEIFER {{
+  uint8_t lateral_controls_allowed_pkt;
+  // }} PFEIFER - mads
   uint8_t gas_interceptor_detected_pkt;
   uint8_t car_harness_status_pkt;
   uint8_t safety_mode_pkt;

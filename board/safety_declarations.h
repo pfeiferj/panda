@@ -164,6 +164,9 @@ void safety_tick(const addr_checks *addr_checks);
 
 // This can be set by the safety hooks
 bool controls_allowed = false;
+// mads - PFEIFER {{
+bool lateral_controls_allowed = false;
+// }} PFEIFER - mads
 bool relay_malfunction = false;
 bool gas_interceptor_detected = false;
 int gas_interceptor_prev = 0;
@@ -178,6 +181,9 @@ float vehicle_speed = 0;
 bool vehicle_moving = false;
 bool acc_main_on = false;  // referred to as "ACC off" in ISO 15622:2018
 int cruise_button_prev = 0;
+// mads - PFEIFER {{
+int main_button_prev = 0;
+// }} PFEIFER - mads
 bool safety_rx_checks_invalid = false;
 
 // for safety modes with torque steering control

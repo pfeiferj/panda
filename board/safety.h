@@ -326,6 +326,9 @@ int set_safety_hooks(uint16_t mode, uint16_t param) {
   vehicle_moving = false;
   acc_main_on = false;
   cruise_button_prev = 0;
+  // mads - PFEIFER {{
+  main_button_prev = 0;
+  // }} PFEIFER - mads
   desired_torque_last = 0;
   rt_torque_last = 0;
   ts_angle_last = 0;
@@ -524,7 +527,11 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const SteeringLi
   bool violation = false;
   uint32_t ts = microsecond_timer_get();
 
-  if (controls_allowed) {
+  // if (controls_allowed) {
+  // mads - PFEIFER {{
+  if (controls_allowed || lateral_controls_allowed) {
+  // }} PFEIFER - mads
+
     // *** global torque limit check ***
     violation |= max_limit_check(desired_torque, limits.max_steer, -limits.max_steer);
 
@@ -551,7 +558,11 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const SteeringLi
   }
 
   // no torque if controls is not allowed
-  if (!controls_allowed && (desired_torque != 0)) {
+  // if (!controls_allowed && (desired_torque != 0)) {
+  // mads - PFEIFER {{
+  if (!(controls_allowed || lateral_controls_allowed) && (desired_torque != 0)) {
+  // }} PFEIFER - mads
+
     violation = true;
   }
 
@@ -593,7 +604,11 @@ bool steer_torque_cmd_checks(int desired_torque, int steer_req, const SteeringLi
   }
 
   // reset to 0 if either controls is not allowed or there's a violation
-  if (violation || !controls_allowed) {
+  // if (violation || !controls_allowed) {
+  // mads - PFEIFER {{
+  if (violation || !(controls_allowed || lateral_controls_allowed)) {
+  // }} PFEIFER - mads
+
     valid_steer_req_count = 0;
     invalid_steer_req_count = 0;
     desired_torque_last = 0;
