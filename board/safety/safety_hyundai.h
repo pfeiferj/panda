@@ -295,7 +295,10 @@ static int hyundai_tx_hook(CANPacket_t *to_send) {
   if ((addr == 1265) && !hyundai_longitudinal) {
     int button = GET_BYTE(to_send, 0) & 0x7U;
 
-    bool allowed_resume = (button == 1) && controls_allowed;
+    // bool allowed_resume = (button == 1) && controls_allowed;
+    // PFEIFER - mads {{
+    bool allowed_resume = (button == 1) && (controls_allowed || lateral_controls_allowed);
+    // }} PFEIFER - mads
     bool allowed_cancel = (button == 4) && cruise_engaged_prev;
     if (!(allowed_resume || allowed_cancel)) {
       tx = 0;

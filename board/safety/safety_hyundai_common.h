@@ -65,6 +65,15 @@ void hyundai_common_cruise_buttons_check(const int cruise_button, const int main
     hyundai_last_button_interaction = MIN(hyundai_last_button_interaction + 1U, HYUNDAI_PREV_BUTTON_SAMPLES);
   }
 
+  // PFEIFER - mads {{
+  if (main_button != 0 && main_button_prev == 0) { // main_button was pressed
+    lateral_controls_allowed = (lateral_controls_allowed + 1) % 2; // toggle
+  }
+  if (controls_allowed == 1) { // always allow lateral_controls when long controls are allowed, makes syncing easier
+    lateral_controls_allowed = 1;
+  }
+  // }} PFEIFER - mads
+
   if (hyundai_longitudinal) {
     // enter controls on falling edge of resume or set
     bool set = (cruise_button != HYUNDAI_BTN_SET) && (cruise_button_prev == HYUNDAI_BTN_SET);
@@ -79,6 +88,7 @@ void hyundai_common_cruise_buttons_check(const int cruise_button, const int main
     }
 
     cruise_button_prev = cruise_button;
+    main_button_prev = main_button;
   }
 }
 
