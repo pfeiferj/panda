@@ -78,7 +78,17 @@ void hyundai_common_cruise_buttons_check(const int cruise_button, const int main
       controls_allowed = 0;
     }
 
+    // PFEIFER - mads {{
+    if (main_button != 0 && main_button_prev == 0) { // main_button was pressed
+      lateral_controls_allowed = (lateral_controls_allowed + 1) % 2; // toggle
+    }
+    if (controls_allowed == 1) { // always allow lateral_controls when long controls are allowed, makes syncing easier
+      lateral_controls_allowed = 1;
+    }
+    // }} PFEIFER - mads
+
     cruise_button_prev = cruise_button;
+    main_button_prev = main_button;
   }
 }
 
