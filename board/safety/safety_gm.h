@@ -108,6 +108,9 @@ static void gm_rx_hook(CANPacket_t *to_push) {
     }
 
     if ((addr == 0xC9) && (gm_hw == GM_CAM)) {
+      // PFEIFER - AOL {{
+      acc_main_on = GET_BIT(to_push, 29U) != 0U;
+      // }} PFEIFER - AOL
       brake_pressed = GET_BIT(to_push, 40U) != 0U;
     }
 

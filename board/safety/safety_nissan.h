@@ -21,6 +21,10 @@ const CanMsg NISSAN_TX_MSGS[] = {
 
 // Signals duplicated below due to the fact that these messages can come in on either CAN bus, depending on car model.
 RxCheck nissan_rx_checks[] = {
+  // PFEIFER - AOL {{
+  {.msg = {{0x1b6, 0, 8, .expected_timestep = 10000U},
+           {0x1b6, 1, 8, .expected_timestep = 10000U}, { 0 }}},  // PRO_PILOT (100HZ)
+  // }} PFEIFER - AOL
   {.msg = {{0x2, 0, 5, .expected_timestep = 10000U},
            {0x2, 1, 5, .expected_timestep = 10000U}, { 0 }}},  // STEER_ANGLE_SENSOR (100Hz)
   {.msg = {{0x285, 0, 8, .expected_timestep = 20000U},
@@ -64,11 +68,20 @@ static void nissan_rx_hook(CANPacket_t *to_push) {
       update_sample(&vehicle_speed, ROUND((right_rear + left_rear) / 2.0 * 0.005 / 3.6 * VEHICLE_SPEED_FACTOR));
     }
 
+    // PFEIFER - AOL {{
+    if (addr == 0x1b6) {
+      acc_main_on = GET_BIT(to_push, 36U);
+    }
+    // }} PFEIFER - AOL
+
     // X-Trail 0x15c, Leaf 0x239
     if ((addr == 0x15c) || (addr == 0x239)) {
       if (addr == 0x15c){
         gas_pressed = ((GET_BYTE(to_push, 5) << 2) | ((GET_BYTE(to_push, 6) >> 6) & 0x3U)) > 3U;
       } else {
+        // PFEIFER - AOL {{
+        acc_main_on = GET_BIT(to_push, 17U);
+        // }} PFEIFER - AOL
         gas_pressed = GET_BYTE(to_push, 0) > 3U;
       }
     }
