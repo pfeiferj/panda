@@ -677,8 +677,8 @@ bool steer_angle_cmd_checks(int desired_angle, bool steer_control_enabled, const
       int delta_angle_up_lower = interpolate(limits.angle_rate_up_lookup, (vehicle_speed.max / VEHICLE_SPEED_FACTOR) + 1.) * limits.angle_deg_to_can;
       int delta_angle_down_lower = interpolate(limits.angle_rate_down_lookup, (vehicle_speed.max / VEHICLE_SPEED_FACTOR) + 1.) * limits.angle_deg_to_can;
 
-      int highest_desired_angle_lower = desired_angle_last + ((desired_angle_last > 0) ? delta_angle_up_lower : delta_angle_down_lower);
-      int lowest_desired_angle_lower = desired_angle_last - ((desired_angle_last >= 0) ? delta_angle_down_lower : delta_angle_up_lower);
+      int highest_desired_angle_lower = angle_meas.values[MAX_SAMPLE_VALS-1] + ((angle_meas.values[MAX_SAMPLE_VALS-1] > 0) ? delta_angle_up_lower : delta_angle_down_lower);
+      int lowest_desired_angle_lower = angle_meas.values[MAX_SAMPLE_VALS-1] - ((angle_meas.values[MAX_SAMPLE_VALS-1] >= 0) ? delta_angle_down_lower : delta_angle_up_lower);
 
       lowest_desired_angle = MIN(MAX(lowest_desired_angle, angle_meas.min - limits.max_angle_error - 1), highest_desired_angle_lower);
       highest_desired_angle = MAX(MIN(highest_desired_angle, angle_meas.max + limits.max_angle_error + 1), lowest_desired_angle_lower);
